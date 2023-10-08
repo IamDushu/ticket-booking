@@ -16,7 +16,7 @@ func main() {
 	fmt.Printf("We have a total of %v tickets and %v are still available.\n", conferenceTickets, remainingTickets)
 	fmt.Println("Get your tickets here to attend")
 
-	for {
+	for remainingTickets > 0 && len(bookings) < 50 {
 		var firstName string
 		var lastName string
 		var email string
@@ -31,21 +31,37 @@ func main() {
 		fmt.Println("Enter number of tickets: ")
 		fmt.Scan(&userTickets)
 
-		remainingTickets = remainingTickets - userTickets
-		bookings = append(bookings, firstName+" "+lastName)
+		isValidName := len(firstName) >= 2 && len(lastName) >= 2
+		isValidEmail := strings.Contains(email, "@")
+		isValidTicketNumber := userTickets > 0 && userTickets <= remainingTickets
 
-		fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
-		fmt.Printf("%v tickets are remaining for %v\n", remainingTickets, conferenceName)
+		if isValidName && isValidEmail && isValidTicketNumber {
+			remainingTickets = remainingTickets - userTickets
+			bookings = append(bookings, firstName+" "+lastName)
 
-		firstNames := []string{}
+			fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
+			fmt.Printf("%v tickets are remaining for %v\n", remainingTickets, conferenceName)
 
-		for _, booking := range bookings {
-			var name = strings.Fields(booking) //"Dushyanth G" -> ["Dushyanth","G"]
-			var firstName = name[0]
-			firstNames = append(firstNames, firstName)
+			firstNames := []string{}
+
+			for _, booking := range bookings {
+				var name = strings.Fields(booking) //"Dushyanth G" -> ["Dushyanth","G"]
+				firstNames = append(firstNames, name[0])
+			}
+
+			fmt.Printf("These are all our bookings: %v\n", firstNames)
+
+		} else {
+			if !isValidName {
+				fmt.Println("Your first name or last name entered is too short")
+			}
+			if !isValidEmail {
+				fmt.Println("Your entered email is invalid, doesn't contain @ sign")
+			}
+			if !isValidTicketNumber {
+				fmt.Println("No.of Tickets entered is invalid")
+			}
 		}
-
-		fmt.Printf("These are all our bookings: %v\n", firstNames)
 	}
-
+	fmt.Println("Our Conference is sold out!. Come back next year.")
 }
