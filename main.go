@@ -5,14 +5,16 @@ import (
 	"strings"
 )
 
+// Package Level Variables
+const conferenceTickets int = 50
+
+var conferenceName = "Go Conference"
+var remainingTickets uint = 50
+var bookings = []string{}
+
 func main() {
 
-	conferenceName := "Go Conference"
-	const conferenceTickets int = 50
-	var remainingTickets uint = 50
-	bookings := []string{}
-
-	greetUsers(conferenceName, conferenceTickets, remainingTickets)
+	greetUsers()
 
 	for remainingTickets > 0 && len(bookings) < 50 {
 
@@ -21,10 +23,9 @@ func main() {
 
 		if isValidName && isValidEmail && isValidTicketNumber {
 
-			//Problem Here: bookings value is passed as value not as reference - App Bug
-			bookTicket(remainingTickets, userTickets, bookings, firstName, lastName, email, conferenceName)
+			bookTicket(firstName, lastName, email, userTickets)
 
-			firstNames := getFirstNames(bookings)
+			firstNames := getFirstNames()
 			fmt.Printf("These are all our bookings: %v\n", firstNames)
 
 		} else {
@@ -42,13 +43,13 @@ func main() {
 	fmt.Println("Our Conference is sold out!. Come back next year.")
 }
 
-func greetUsers(confName string, confTickets int, remainingTickets uint) {
-	fmt.Printf("Welcome to our %v Booking Application!\n", confName)
-	fmt.Printf("We have a total of %v tickets and %v are still available.\n", confTickets, remainingTickets)
+func greetUsers() {
+	fmt.Printf("Welcome to our %v Booking Application!\n", conferenceName)
+	fmt.Printf("We have a total of %v tickets and %v are still available.\n", conferenceTickets, remainingTickets)
 	fmt.Println("Get your tickets here to attend")
 }
 
-func getFirstNames(bookings []string) []string {
+func getFirstNames() []string {
 	firstNames := []string{}
 	for _, booking := range bookings {
 		var name = strings.Fields(booking) //"Dushyanth G" -> ["Dushyanth","G"]
@@ -84,7 +85,7 @@ func getUserInput() (string, string, string, uint) {
 	return firstName, lastName, email, userTickets
 }
 
-func bookTicket(remainingTickets uint, userTickets uint, bookings []string, firstName string, lastName string, email string, conferenceName string) {
+func bookTicket(firstName string, lastName string, email string, userTickets uint) {
 	remainingTickets = remainingTickets - userTickets
 	bookings = append(bookings, firstName+" "+lastName)
 
