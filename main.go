@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 )
 
 // Package Level Variables
@@ -30,6 +31,7 @@ func main() {
 		if isValidName && isValidEmail && isValidTicketNumber {
 
 			bookTicket(firstName, lastName, email, userTickets)
+			sendTicket(firstName, lastName, email, userTickets)
 
 			firstNames := getFirstNames()
 			fmt.Printf("These are all our bookings: %v\n", firstNames)
@@ -84,7 +86,7 @@ func getUserInput() (string, string, string, uint) {
 func bookTicket(firstName string, lastName string, email string, userTickets uint) {
 	remainingTickets = remainingTickets - userTickets
 
-	//create a map for a user
+	//create a Struct for userData
 	var userData = User{
 		firstName:       firstName,
 		lastName:        lastName,
@@ -97,4 +99,12 @@ func bookTicket(firstName string, lastName string, email string, userTickets uin
 
 	fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
 	fmt.Printf("%v tickets are remaining for %v\n", remainingTickets, conferenceName)
+}
+
+func sendTicket(firstName string, lastName string, email string, userTickets uint) {
+	time.Sleep(10 * time.Second)
+	var ticket = fmt.Sprintf("%v tickets for %v %v", userTickets, firstName, lastName)
+	fmt.Println("*#*#*#*#*#*#*#*#*#*#*#*#*#*#")
+	fmt.Printf("Sending ticket:\n %v \nto email address %v\n", ticket, email)
+	fmt.Println("*#*#*#*#*#*#*#*#*#*#*#*#*#*#")
 }
